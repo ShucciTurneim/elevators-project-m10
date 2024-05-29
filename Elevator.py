@@ -26,6 +26,10 @@ class elevator:
         initial_location_ceiling = initial_location_floor + self.hight
         
         
+    def change(self):clear
+    
+        pass
+        
         
         
         

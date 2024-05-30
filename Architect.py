@@ -15,18 +15,7 @@ def floors_builder(num_floors,screen, screen_height):
         floor = Floor(num_floor)
         floor.build_floor(num_floor,screen,screen_height)
 
-
 def new_building_architect(floors_num, elevators_num, screen):
     screen_height = pg.display.get_surface().get_height()
     elevators_builder(elevators_num, screen, screen_height)
     floors_builder(floors_num,screen, screen_height)
-    # pg.init()
-    # size = (width,hight)
-    # screen = pg.display.set_mode(size)
-    # pg.display.set_caption("game")
-    # screen.fill(white)
-    # pg.display.flip()
-    # image ="/home/mefathim/Documents/elevators-project-m10/elv.png"
-    # img = pg.image.load(image)
-    # screen.blit(img,(0,hight-64))
-    # pg.display.flip()

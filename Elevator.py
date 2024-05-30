@@ -9,9 +9,9 @@ class Elevator:
      # variables of creating elevator
         self.number = int
         self.width = 64
-        self.hight = 64
+        self.height = 64
         self.left_side_position = 0  # (left wall + floor_width+timer_width)
-        self.right_side_position = self.left_side_position + self.width
+        # self.right_side_position = self.left_side_position + self.width
         self.path_img = "/home/mefathim/Documents/elevators-project-m10/elv.png"
 
     # variables of elevator travel
@@ -22,15 +22,14 @@ class Elevator:
         self.operation_duration = 0  # sum of all times of objects in q
 
      # operations of creating elevator
-    def build_elevator(self, num_elevator, hight, screen):
-        self.left_side_position = num_elevator * self.width + 64 + 64
+    def build_elevator(self, num_elevator, screen_height, screen):
+        self.position = (num_elevator * self.width + 64 + 64)
         # self.right_side_position = self.left_side_position + self.width
-        initial_location_floor = hight
+        initial_location = (screen_height)
         # initial_location_ceiling = initial_location_floor + self.hight
         # picture = self.path_img
-        image = "/home/mefathim/Documents/elevators-project-m10/elv.png"
-        img = pg.image.load(image)
-        screen.blit(img, (self.left_side_position, initial_location_floor-64))
+        img = pg.image.load(self.path_img)
+        screen.blit(img, (self.position, initial_location - self.height))
         pg.display.flip()
 
         # operations of elevator travel

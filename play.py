@@ -13,7 +13,7 @@ def main(elevators_numbers,floors_number):
     #    return main(elevators_numbers,floors_number)
     # int(elevators_numbers)
     # int(floors_number)
-    width = (elevators_numbers + 2) * 64
+    width = (elevators_numbers + 2) * 64 
     hight = floors_number * 64
     pg.init()
     size = (width,hight)
@@ -25,7 +25,7 @@ def main(elevators_numbers,floors_number):
     # IMAGE_SMALL = pg.transform.scale(image,(50, 30))
     # img = pg.image.lo
     new_building_architect(floors_number, elevators_numbers,screen)
-
+    print(screen)
 
 
     finish = False
@@ -35,5 +35,6 @@ def main(elevators_numbers,floors_number):
             finish = True
 # pg.quit()
 main(elevators_numbers,floors_number)
+
    
 

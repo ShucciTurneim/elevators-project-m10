@@ -5,9 +5,9 @@ from Floor import Floor
 
 def elevators_builder(elevators_num, screen, screen_height):
     for num_elevator in range(elevators_num):
-        new_elevator = f"elevator_{num_elevator}"
-        new_elevator = Elevator(num_elevator)
-        new_elevator.build_elevator(num_elevator, screen_height, screen)
+        elevator = f"elevator_{num_elevator}"
+        elevator = Elevator(num_elevator)
+        elevator.build_elevator(num_elevator, screen_height, screen)
 
 def floors_builder(num_floors,screen, screen_height):
     for num_floor in range(num_floors):

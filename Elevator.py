@@ -1,15 +1,16 @@
 from collections import deque
 import pygame as pg
-# from Floor import Floor
-# import floors
+from Floor import Floor
+width_elevator = 64
+height_elevator = Floor.height()
 
 
 class Elevator:
     def __init__(self, number):
      # variables of creating elevator
         self.number = int
-        self.width = 64
-        self.height = 64
+        self.width = width_elevator
+        self.height = height_elevator
         self.left_side_position = 0  # (left wall + floor_width+timer_width)
         # self.right_side_position = self.left_side_position + self.width
         self.path_img = "/home/mefathim/Documents/elevators-project-m10/elv.png"
@@ -20,6 +21,10 @@ class Elevator:
         self.departure = 0  # self.que.popleft
         self.next_stop = self.que[0]
         self.operation_duration = 0  # sum of all times of objects in q
+        
+    #for global use
+    def width():
+        return width_elevator
 
      # operations of creating elevator
     def build_elevator(self, num_elevator, screen_height, screen):
@@ -29,7 +34,8 @@ class Elevator:
         # initial_location_ceiling = initial_location_floor + self.hight
         # picture = self.path_img
         img = pg.image.load(self.path_img)
-        screen.blit(img, (self.position, initial_location - self.height))
+        IMAGE = pg.transform.scale(img, (width_elevator, height_elevator))
+        screen.blit(IMAGE, (self.position, initial_location - self.height))
         pg.display.flip()
 
         # operations of elevator travel
@@ -46,3 +52,4 @@ class Elevator:
 
     def elapsed_time(self,):
         return (abs(self.next_stop - self.departure)/2)-64      #-floor.timer
+

@@ -1,7 +1,9 @@
 import pygame as pg
-from  Architect import new_building_architect
+from  Architect import Building
 from Elevator import Elevator
 from Floor import Floor
+from Manager import call
+
 background_screen_img = "/home/mefathim/Documents/elevators-project-m10/lobby.png"
 screen_color =(255,255,255)
 
@@ -18,9 +20,6 @@ def screen_design(elevators_numbers,floors_number):
     screen.blit(background_screen,(0,0))
     return screen
     
-    
-# elevators_numbers = int(input("enter elevators integer number"))
-# floors_number = int(input("enter floors integer number"))
 def main(elevators_numbers,floors_number):
     # if type(elevators_numbers) != int or type(floors_number) != int:
     #    return main(elevators_numbers,floors_number)
@@ -29,14 +28,20 @@ def main(elevators_numbers,floors_number):
     screen = screen_design(elevators_numbers,floors_number)
 
     pg.display.flip()
-    new_building_architect(floors_number, elevators_numbers,screen)
-
-
+    building = Building()
+    building.new_building_architect(floors_number, elevators_numbers, screen)
+    
     finish = False
     while not finish:
       for event in pg.event.get():
         if event.type == pg.QUIT:
             finish = True
+        left = 1    
+        if event.type == pg.MOUSEBUTTONDOWN and event.button  == left:
+            mouse_position = pg.mouse.get_pos() 
+            call(mouse_position,floors_number,building,screen) 
+            
+            
 # pg.quit()
 main(10,10)
 

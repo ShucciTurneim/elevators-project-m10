@@ -26,8 +26,8 @@ class Floor:
         self.roof_position = None
         self.width_position = self.timer_width
         self.right_side = self.timer_width + self.width_position
-        self.button = None
-        self.button_radius = None
+        self.button = ()
+        self.button_radius = ()
         
     # for global use
     def black_space_thickness():
@@ -58,7 +58,7 @@ class Floor:
         text_r.center = (self.button)
         screen.blit(number, text_r)
 
-    def drew_button(self, screen,roof_position, called_by):
+    def drew_button(self, screen, roof_position, called_by):
         self.button_radius = height_img/4
         if called_by in (builder,order_completed):
             color = button_default_color

@@ -43,7 +43,7 @@ def main(elevators_numbers,floors_number):
             
             
 # pg.quit()
-main(2,10)
+main(5,10)
 
    
 

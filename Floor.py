@@ -91,7 +91,7 @@ class Floor:
         while time_left != 0.0:
             if counter >= 1:
                 time_left -= 0.5
-                print(time_left)
+                # print(time_left)
             pg.draw.rect(screen, black_space_color, Rect)
             number = font.render(f'{time_left}', True, button_on_hold_color)
             screen.blit(number, clock_position)
@@ -101,6 +101,7 @@ class Floor:
             counter += 1
         sound = pg.mixer.Sound(self.sound_voice)    
         sound.play()
+        self.drew_button(screen, self.roof_position, order_completed)
         time.sleep(2)   
         
     

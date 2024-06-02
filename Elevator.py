@@ -41,20 +41,22 @@ class Elevator:
 
         # operations of elevator travel
     def send_order(self, floor, building, screen):
-        print(floor)
         new_travel_duration = (abs(floor - self.absolute_stop)/2) + stand_by
         self.operation_duration += new_travel_duration
-        self.que.append(floor)
+        print(self.operation_duration)
+        self.que.append(floor)    
+        self.next_stop = self.que[0]
         self.absolute_stop = self.que[-1]
-        building.floors[floor].show_arrival_time(screen,self.operation_duration-stand_by)
+        building.floors[floor].show_arrival_time(screen,self.operation_duration - stand_by)
+        print(self.operation_duration)
 
     def finish_order(self):
-        ended_travel_duration = abs(self.departure - self.next_stop)/2 -2 #standby_time
+        ended_travel_duration = abs(self.departure - self.next_stop)/2 +2 #standby_time
         self.operation_duration -= ended_travel_duration
         self.departure = self.que.popleft()
+        print(self.operation_duration)
         print(self.departure)
-        if self.que:
-            self.next_stop = self.que[0]
+        
 
     def elapsed_time(self,building):
         next_stop = self.next_stop

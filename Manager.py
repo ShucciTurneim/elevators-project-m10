@@ -21,6 +21,7 @@ def call(mouse_position,num_floors, building, screen):
                 priority_elevator = elevator_selection(floor.number,building, screen)
                 priority_elevator.send_order(floor.number, building, screen)
                 priority_elevator.finish_order()
+                
             
 
             

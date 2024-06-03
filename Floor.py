@@ -16,7 +16,7 @@ timer_width = 64
 builder = order_completed = 1
 
 
-class Floor:
+class Floor(pg.sprite.Sprite):
     def __init__(self, number):
         # variables of creating floor
         self.number = number

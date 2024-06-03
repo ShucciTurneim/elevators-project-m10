@@ -3,10 +3,11 @@ from  Architect import Building
 from Elevator import Elevator
 from Floor import Floor
 from Manager import call
+import time
 
 background_screen_img = "/home/mefathim/Documents/elevators-project-m10/lobby.png"
 screen_color =(255,255,255)
-
+        #initial creation of the background screen and dimensions  
 def screen_design(elevators_numbers,floors_number):
     width = (elevators_numbers) * Elevator.width() + Floor.width() + Floor.timer_width()
     height = floors_number * Floor.height() - Floor.black_space_thickness()
@@ -15,9 +16,9 @@ def screen_design(elevators_numbers,floors_number):
     screen = pg.display.set_mode(size)
     pg.display.set_caption("building_game")
     screen.fill(screen_color)
-    background_screen = pg.image.load(background_screen_img)
-    background_screen = pg.transform.scale(background_screen, (width, height))
-    screen.blit(background_screen,(0,0))
+    # background_screen = pg.image.load(background_screen_img)
+    # background_screen = pg.transform.scale(background_screen, (width, height))
+    # screen.blit(background_screen,(0,0))
     return screen
     
 def main(elevators_numbers,floors_number):
@@ -25,21 +26,28 @@ def main(elevators_numbers,floors_number):
     #    return main(elevators_numbers,floors_number)
     # int(elevators_numbers)
     # int(floors_number)
-    screen = screen_design(elevators_numbers,floors_number)
-
-    pg.display.flip()
-    building = Building()
-    building.new_building_architect(floors_number, elevators_numbers, screen)
     
+    
+    screen = screen_design(elevators_numbers,floors_number)
+    left = 1   
+    building = Building()
+    
+       #initial creation of floors and elevators
+    building.new_building_architect(floors_number, elevators_numbers, screen) 
     finish = False
     while not finish:
       for event in pg.event.get():
         if event.type == pg.QUIT:
-            finish = True
-        left = 1    
+            finish = True  
         if event.type == pg.MOUSEBUTTONDOWN and event.button  == left:
             mouse_position = pg.mouse.get_pos() 
-            call(mouse_position,floors_number,building,screen) 
+            #call is function of manager
+            call(mouse_position,floors_number,building,screen)       
+      pg.display.flip()
+      pg.time.Clock().tick(60)
+     
+      
+
             
             
 # pg.quit()

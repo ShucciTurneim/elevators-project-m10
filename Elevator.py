@@ -12,7 +12,7 @@ screen_color =(255,255,255)
 class Elevator:
     def __init__(self, number):
      # variables of creating elevator
-        self.number = int
+        self.number = number
         self.width = width_elevator
         self.height = height_elevator
         self.width_position = 0
@@ -54,15 +54,19 @@ class Elevator:
         self.absolute_stop = self.que[-1]
         self.dst = self.next_stop
         self.travels = True
+        
 
-    def finish_order(self):
+    def finish_order(self,building):
         ended_travel_duration = abs(self.departure - self.next_stop)/2 +2 #standby_time
         self.operation_duration -= ended_travel_duration
         self.departure = self.que.popleft()
+        floor = building.floors[self.dst]
+        floor.made_order = False
         if self.que:
             self.dst = self.que[0]
-        else:
-            self.travels = False    
+        sound =  pg.mixer.Sound(floor.sound_voice)    
+        sound.play()
+               
         
 
         

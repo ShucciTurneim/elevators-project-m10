@@ -2,7 +2,8 @@ import pygame as pg
 from  Architect import Building
 from Elevator import Elevator
 from Floor import Floor
-from Manager import call
+from Manager import call, travels,update_finish,show_arrival_time
+from elevator_selection import elevator_selection
 import time
 
 background_screen_img = "/home/mefathim/Documents/elevators-project-m10/lobby.png"
@@ -28,29 +29,25 @@ def main(elevators_numbers,floors_number):
     # int(floors_number)
     
     
-    screen = screen_design(elevators_numbers,floors_number)
-    left = 1   
+    screen = screen_design(elevators_numbers,floors_number)   
     building = Building()
     
        #initial creation of floors and elevators
     building.new_building_architect(floors_number, elevators_numbers, screen) 
     finish = False
     while not finish:
-      for event in pg.event.get():
-        if event.type == pg.QUIT:
-            finish = True  
-        if event.type == pg.MOUSEBUTTONDOWN and event.button  == left:
-            mouse_position = pg.mouse.get_pos() 
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                finish = True              
             #call is function of manager
-            call(mouse_position,floors_number,building,screen)       
-      pg.display.flip()
-      pg.time.Clock().tick(60)
+            call(building,event, screen)
+        show_arrival_time(screen, building)
+        travels(screen,building)
+        update_finish(building)       
+        pg.display.flip()
+        pg.time.Clock().tick(2000)
      
       
-
-            
-            
-# pg.quit()
 main(5,10)
 
    

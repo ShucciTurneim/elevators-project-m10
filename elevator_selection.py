@@ -13,6 +13,7 @@ def elevator_selection(dst,building):
         if min_possible_time > arrival_time: 
             min_possible_time = arrival_time
             property__elevator = elevator
+    building.floors[dst].time_left = min_possible_time
     return property__elevator, min_possible_time
                               
 

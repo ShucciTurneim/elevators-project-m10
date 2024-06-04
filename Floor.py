@@ -33,6 +33,13 @@ class Floor:
         
         # variables of call
         self.floor_timer = 0
+        self.time_left = 0.0
+        self.made_order = False
+        self.clock_position = 0
+        self.timer_Rect = 0
+        
+    def get_id(self):
+        return self.number
         
     # for global use
     def black_space_thickness():
@@ -51,6 +58,9 @@ class Floor:
         width_button_position = self.width_position + width_img/2
         height_button_position = self.roof_position + black_space_thickness + height_img/2
         self.button = width_button_position,height_button_position
+        self.clock_position = (0 + width_img/4,self.roof_position + black_space_thickness + height_img/4)
+        position_and_size = 0,self.roof_position + black_space_thickness, self.timer_width, height_img
+        self.timer_Rect = pg.Rect(position_and_size)
         
     
     def drew_floor_number(self, screen, roof_position, color):
@@ -109,8 +119,8 @@ class Floor:
         #function activated by elevator
     def show_arrival_time(self,screen,time_left):
         position_and_size = 0,self.roof_position + black_space_thickness, self.timer_width, height_img
-        Rect = pg.Rect(position_and_size)
-        pg.draw.rect(screen, black_space_color, Rect)
+        timer_Rect = pg.Rect(position_and_size)
+        pg.draw.rect(screen, black_space_color, timer_Rect)
         clock_position = (0 + width_img/4,self.roof_position + black_space_thickness + height_img/4)
-        self.start_clocking(clock_position,time_left,screen,Rect)
+        self.start_clocking(clock_position,time_left,screen,timer_Rect)
         pg.display.flip()

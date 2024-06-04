@@ -16,7 +16,7 @@ timer_width = 64
 builder = order_completed = 1
 
 
-class Floor(pg.sprite.Sprite):
+class Floor:
     def __init__(self, number):
         # variables of creating floor
         self.number = number
@@ -51,8 +51,9 @@ class Floor(pg.sprite.Sprite):
         width_button_position = self.width_position + width_img/2
         height_button_position = self.roof_position + black_space_thickness + height_img/2
         self.button = width_button_position,height_button_position
+        
     
-    def drew_floor_number(self, screen,roof_position, color):
+    def drew_floor_number(self, screen, roof_position, color):
         font = pg.font.Font(None, int(height_img/2)) 
         number = font.render(f'{self.number}', True, color)
         text_r = number.get_rect()

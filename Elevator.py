@@ -1,4 +1,5 @@
 from collections import deque
+# from Architect import Building
 import pygame as pg
 from Floor import Floor
 import time
@@ -27,6 +28,8 @@ class Elevator:
         self.departure = 0  # self.que.popleft
         self.next_stop = 0
         self.operation_duration = 0  # sum of all times of objects in q
+        self.dst = 0
+        self.travels = False
         
     #for global use
     def width():
@@ -49,11 +52,18 @@ class Elevator:
         self.que.append(floor)    
         self.next_stop = self.que[0]
         self.absolute_stop = self.que[-1]
+        self.dst = self.next_stop
+        self.travels = True
 
     def finish_order(self):
         ended_travel_duration = abs(self.departure - self.next_stop)/2 +2 #standby_time
         self.operation_duration -= ended_travel_duration
         self.departure = self.que.popleft()
+        if self.que:
+            self.dst = self.que[0]
+        else:
+            self.travels = False    
+        
 
         
     def elapsed_time(self,building):

@@ -8,20 +8,21 @@ call = 0
 stand_by = 2
 screen_color =(255,255,255)
 
-def travels(screen,priority_elevator, dst,building):
-        stop = dst.roof_position
-        location = priority_elevator.current_location
-        while location != stop:
-            if location < stop:
-                priority_elevator.current_location += 1
+def travels(screen,building):
+    
+    for elevator in building.elevators:                                     #
+        if elevator.travels:
+            if elevator.current_location < elevator.dst:         #dst= roof_position  #                
+                elevator.current_location += 1
                 building.update_elevators(screen)   
-            elif location > stop:
-                priority_elevator.current_location -= 1 
+            elif elevator.current_location > elevator.dst:
+                print(elevator.current_location,elevator.dst) 
+                elevator.current_location -= 20
                 building.update_elevators(screen)   
-            location = priority_elevator.current_location    
+            #location = priority_elevator.current_location    
             pg.display.flip() 
-            pg.time.Clock().tick(60)  
-        priority_elevator.current_location = stop 
+            pg.time.Clock().tick(60)
+        #priority_elevator.current_location = stop 
         
 def call(mouse_position,num_floors, building, screen):
     x1, y1 = mouse_position
@@ -33,7 +34,7 @@ def call(mouse_position,num_floors, building, screen):
             priority_elevator, time_left = elevator_selection(floor.number,building)
             priority_elevator.send_order(floor.number, building, screen)
             floor.show_arrival_time(screen, time_left)
-            travels(screen,priority_elevator, floor,building)
+            travels(screen,building)
             priority_elevator.finish_order()
                 
             

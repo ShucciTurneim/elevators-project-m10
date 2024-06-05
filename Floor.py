@@ -22,14 +22,14 @@ class Floor:
         self.number = number
         self.width = width
         self.height = height
-        self.path_img = "/home/mefathim/Documents/elevators-project-m10/wall.png"
+        self.path_img = "wall.png"
         self.timer_width = timer_width
         self.roof_position = None
         self.width_position = self.timer_width
         self.right_side = self.timer_width + self.width_position
         self.button = ()
         self.button_radius = ()
-        self.sound_voice = "ding.mp3"
+        self.sound_voice = "/home/mefathim/elevators-project-m10/ding.mp3"
         
         # variables of call
         self.floor_timer = 0
@@ -37,6 +37,7 @@ class Floor:
         self.made_order = False
         self.clock_position = 0
         self.timer_Rect = 0
+        self.time_on = False 
         
     def get_id(self):
         return self.number
@@ -95,32 +96,5 @@ class Floor:
         self.drew_roof(self.roof_position, screen)
         pg.display.flip()
         
-    #operations of call
-    def start_clocking(self,clock_position,time_left,screen, Rect):
-        font = pg.font.Font(None, int(height_img/2)) 
-        counter = 0
-        while time_left != 0.0:
-            if counter >= 1:
-                time_left -= 0.5
-                # print(time_left)
-            pg.draw.rect(screen, black_space_color, Rect)
-            number = font.render(f'{time_left}', True, button_on_hold_color)
-            screen.blit(number, clock_position)
-            pg.display.flip()
-            time.sleep(0.5)          
-            self.floor_timer = time_left      
-            counter += 1
-        sound = pg.mixer.Sound(self.sound_voice)    
-        sound.play()
-        self.drew_button(screen, self.roof_position, order_completed)
-        time.sleep(2)   
+    # #operations of call
         
-    
-        #function activated by elevator
-    def show_arrival_time(self,screen,time_left):
-        position_and_size = 0,self.roof_position + black_space_thickness, self.timer_width, height_img
-        timer_Rect = pg.Rect(position_and_size)
-        pg.draw.rect(screen, black_space_color, timer_Rect)
-        clock_position = (0 + width_img/4,self.roof_position + black_space_thickness + height_img/4)
-        self.start_clocking(clock_position,time_left,screen,timer_Rect)
-        pg.display.flip()

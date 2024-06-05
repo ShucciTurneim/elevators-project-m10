@@ -1,6 +1,7 @@
 from collections import deque
 # from Architect import Building
 import pygame as pg
+import pygame.mixer
 from Floor import Floor
 import time
 width_elevator = 64
@@ -18,7 +19,7 @@ class Elevator:
         self.width_position = 0
         self.position = 0
         self.current_location = 0
-        self.path_img = "/home/mefathim/Documents/elevators-project-m10/elv.png"
+        self.path_img = "elv.png"
         img = pg.image.load(self.path_img)
         self.IMAGE = pg.transform.scale(img, (width_elevator, height_elevator))
 
@@ -30,6 +31,8 @@ class Elevator:
         self.operation_duration = 0  # sum of all times of objects in q
         self.dst = 0
         self.travels = False
+        self.stand_by = False
+        self.stop_time = 0
         
     #for global use
     def width():
@@ -46,6 +49,9 @@ class Elevator:
     
 
         # operations of elevator travel
+        
+    # def 
+        
     def send_order(self, floor, building, screen):
         new_travel_duration = (abs(floor - self.absolute_stop)/2) + stand_by
         self.operation_duration += new_travel_duration
@@ -57,6 +63,7 @@ class Elevator:
         
 
     def finish_order(self,building):
+        self.travels = False
         ended_travel_duration = abs(self.departure - self.next_stop)/2 +2 #standby_time
         self.operation_duration -= ended_travel_duration
         self.departure = self.que.popleft()
@@ -64,21 +71,17 @@ class Elevator:
         floor.made_order = False
         if self.que:
             self.dst = self.que[0]
-        sound =  pg.mixer.Sound(floor.sound_voice)    
-        sound.play()
+            self.travels = True
+        self.stop_time = time.time()
+            
+        # sound =  pg.mixer.Sound(floor.sound_voice)    
+        # sound.play()
                
         
 
         
     def elapsed_time(self,building):
         next_stop = self.next_stop
-        return (abs(next_stop - self.departure)/2)  - building.floors[next_stop].floor_timer
-    
-    # def save_img(small_x, big_x, small_y, big_y, screen):
-    #     reconstruction = {}
-    #     for y in range(small_y,big_y+1):
-    #         for x in range (small_x,big_x+1):
-    #             reconstruction[(x,y)] = screen.get_at(x,y)
-    #     return reconstruction
-    
+        return (abs(next_stop - self.departure)/2)  - building.floors[next_stop].time_left
+
             

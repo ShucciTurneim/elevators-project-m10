@@ -2,11 +2,14 @@ import pygame as pg
 from  Architect import Building
 from Elevator import Elevator
 from Floor import Floor
-from Manager import call, travels,update_finish,show_arrival_time
+from Manager import call, travels,show_arrival_time
 from elevator_selection import elevator_selection
 import time
+import pygame.mixer
+height_floor = 64
 
-background_screen_img = "/home/mefathim/Documents/elevators-project-m10/lobby.png"
+
+background_screen_img = "lobby.png"
 screen_color =(255,255,255)
         #initial creation of the background screen and dimensions  
 def screen_design(elevators_numbers,floors_number):
@@ -42,10 +45,11 @@ def main(elevators_numbers,floors_number):
             #call is function of manager
             call(building,event, screen)
         show_arrival_time(screen, building)
+        # show_time(screen,building)
         travels(screen,building)
-        update_finish(building)       
+        # building.update_elevators_status()     
         pg.display.flip()
-        pg.time.Clock().tick(2000)
+        pg.time.Clock().tick(height_floor*2)
      
       
 main(5,10)

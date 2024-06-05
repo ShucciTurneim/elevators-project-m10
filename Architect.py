@@ -1,12 +1,14 @@
 from Elevator import Elevator
 import pygame as pg
 from Floor import Floor
+import time
 screen_color =(255,255,255)
 class Building:
     # floor_0_position = 0
     def __init__(self) -> None:
         self.elevators = []
         self.floors =[]
+        self.update_time = time.time()
         
     def update_elevators(self, screen):
         screen_height = pg.display.get_surface().get_height()   
@@ -15,7 +17,7 @@ class Building:
             rect = pg.Rect(elevator.width_position, 0, elevator.width, screen_height)
             screen.fill(screen_color,rect)
             screen.blit(elevator.IMAGE, (elevator.position))
-            pg.display.flip()
+            # pg.display.flip()
 
     def elevators_builder(self,elevators_num, screen, screen_height):
         for num_elevator in range(elevators_num):
@@ -40,4 +42,14 @@ class Building:
         screen_height = pg.display.get_surface().get_height()
         self.floors_builder(floors_num,screen, screen_height)
         self.elevators_builder(elevators_num, screen, screen_height)
+        
+    # def update_elevators_status(self):
+    #     for elevator in self.elevators:
+    #         if elevator.stand_by:
+    #             nwe_time = time.time()
+    #             if nwe_time - elevator.stop_time > 2:
+    #                 elevator.travels = True
+    #                 elevator.stand_by = False
+    #                 print(elevator.stop_time)
+                     
         

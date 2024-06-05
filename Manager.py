@@ -5,6 +5,7 @@ from Floor import Floor
 from Architect import Building
 from elevator_selection import elevator_selection
 import time
+import threading
 
 call = 0
 stand_by = 2
@@ -24,53 +25,55 @@ builder = order_completed = 1
 
 def show_arrival_time(screen,building):
     for floor in building.floors:
-        print(floor,floor.made_order)
-        if floor.made_order:
-            font = pg.font.Font(None, int(height_img/2)) 
-            if floor.time_left != 0.0:
-                pg.draw.rect(screen, black_space_color, floor.timer_Rect)
-                number = font.render(f'{floor.time_left}', True, button_on_hold_color)
-                screen.blit(number, floor.clock_position)
-                pg.display.flip()    
-                floor.floor_timer = floor.time_left    
-                floor.time_left -= 0.5
-            else: 
-                floor.drew_button(screen, floor.roof_position, order_completed)                   
-    # time.sleep(0.5)        
+        if floor.made_order and floor.time_on:
+                font = pg.font.Font(None, int(height_img/2)) 
+                floor.drew_button(screen, floor.roof_position,stand_by )
+                if floor.time_left != 0.0:
+                    pg.draw.rect(screen, black_space_color, floor.timer_Rect)
+                    number = font.render(f'{floor.time_left}', True, button_on_hold_color)
+                    screen.blit(number, floor.clock_position)     
+                    floor.time_left -= 0.5
+                else: 
+                    # pg.draw.rect(screen, black_space_color, floor.timer_Rect)
+                    # number = font.render(f'{0.0}', True, button_on_hold_color)
+                    # screen.blit(number, floor.clock_position)  
+                    floor.drew_button(screen, floor.roof_position, order_completed)
+                    pg.draw.rect(screen, screen_color, floor.timer_Rect)  
+                building.update_time = time.time()                      
+                floor.time_on = False
+                   
     
-def update_finish(building):
-    for elevator in building.elevators:
-        if not elevator.travels:
-            if len(elevator.que) > 0:  
-                elevator.finish_order(building)    
-            
-
-
-
+# def show_time(screen,building):
+    # show_timing = threading.Thread(target=show_arrival_time,args=(screen,building))    
+    # show_timing.start()
+        
 def travels(screen,building):
     
-    for elevator in building.elevators:                                     #
-        # print(elevator.number,elevator.travels)
+    for elevator in building.elevators:  
+        height_floor = building.floors[elevator.dst].height
         if elevator.travels:
-            dest_y = building.floors[elevator.dst].roof_position
-            if elevator.current_location < dest_y:         #dst= roof_position  #                
-                elevator.current_location += 5
-                building.update_elevators(screen)   
-            elif elevator.current_location > dest_y:
-                elevator.current_location -= 5
-                building.update_elevators(screen)   
-            else: 
-                elevator.travels = False
-                   
-            #location = priority_elevator.current_location    
-            pg.display.flip() 
-            pg.time.Clock().tick(60)
-        #priority_elevator.current_location = stop 
-        
+            new_time = time.time()
+            half_a_second = new_time - building.update_time
+            if  half_a_second >= 0.5:
+                 for floor in elevator.que:
+                    building.floors[floor].time_on = True
+            if new_time - elevator.stop_time >= 2:
+                dest_y = building.floors[elevator.dst].roof_position
+                if elevator.current_location == dest_y:
+                    elevator.finish_order(building)   
+                elif  half_a_second >= 0.5:
+                    vector = (dest_y - elevator.current_location)/abs(dest_y - elevator.current_location)
+                    while elevator.current_location / height_floor != elevator.current_location // height_floor:
+                        elevator.current_location +=  vector    
+                else:   
+                    vector = (dest_y - elevator.current_location)/abs(dest_y - elevator.current_location)   
+                    elevator.current_location +=  vector
+                    building.update_elevators(screen)
+                    
+                
 def call(building,event,screen):
     left = 1
     if event.type == pg.MOUSEBUTTONDOWN and event.button  == left:
-        print(event)
         mouse_position = pg.mouse.get_pos() 
         x1, y1 = mouse_position
         for floor in building.floors:
@@ -78,8 +81,7 @@ def call(building,event,screen):
             if (x1-x2)**2 +(y1-y2)**2 <= floor.button_radius**2:
                 if not floor.made_order:
                     floor.made_order = True
-                    floor.drew_button(screen,floor.roof_position,call)
-                    pg.display.flip()
+                    floor.time_on = True
                     priority_elevator, floor.time_left = elevator_selection(floor.number,building)
                     priority_elevator.send_order(floor.number, building, screen)
                     # show_arrival_time(screen, building)

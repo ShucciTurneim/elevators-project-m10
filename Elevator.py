@@ -4,7 +4,7 @@ import pygame as pg
 import pygame.mixer
 from Floor import Floor
 import time
-width_elevator = 64
+width_elevator = 200
 height_elevator = Floor.height()
 stand_by = 2
 screen_color =(255,255,255)

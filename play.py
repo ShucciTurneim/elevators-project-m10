@@ -2,7 +2,7 @@ import pygame as pg
 from  Architect import Building
 from Elevator import Elevator
 from Floor import Floor
-from Manager import call, travels,show_arrival_time
+from Manager import call, travels,show_arrival_time,update_arrival_time
 from elevator_selection import elevator_selection
 import time
 import pygame.mixer
@@ -37,8 +37,14 @@ def main(elevators_numbers,floors_number):
     
        #initial creation of floors and elevators
     building.new_building_architect(floors_number, elevators_numbers, screen) 
+    start_T = 0
+    finish_T = 0
     finish = False
     while not finish:
+        sleep_T = finish_T - start_T
+        time.sleep(abs((1/height_floor)-sleep_T))
+        start_T = time.time()
+        
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 finish = True              
@@ -47,13 +53,15 @@ def main(elevators_numbers,floors_number):
         # show_arrival_time(screen, building)
         # show_time(screen,building)
         travels(screen,building)
+        update_arrival_time(building,screen)
         building.close_finish_orders()
         # building.update_elevators_status()     
         pg.display.flip()
-        pg.time.Clock().tick(height_floor*2)
-     
+        # pg.time.Clock().tick(height_floor*2)
+        pg.time.Clock().tick(height_floor*4)
+        finish_T = time.time()
       
-main(5,10)
+main(3,9)
 
    
 

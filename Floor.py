@@ -3,17 +3,19 @@ import time
 pg.init()
 # for color or size changes, please change here
 black_space_color = (0, 0, 0)
+screen_color = (255,255,255)
 numbers_default_color = (225, 0, 0)
 numbers_on_hold_color = (255,215,0)
 button_default_color = (128, 128, 128)
 button_on_hold_color = (0, 128, 0 ,128)
 height_img = 57
-width_img = 64
+width_img = 100
 black_space_thickness  = 7
 height = height_img + black_space_thickness
 width = width_img
 timer_width = 64
-builder = order_completed = 1
+builder = order_completed = -1
+order = 0
 
 
 class Floor:
@@ -26,7 +28,7 @@ class Floor:
         self.timer_width = timer_width
         self.roof_position = None
         self.width_position = self.timer_width
-        self.right_side = self.timer_width + self.width_position
+        self.right_side = self.timer_width + self.width
         self.button = ()
         self.button_radius = ()
         self.sound_voice = "/home/mefathim/elevators-project-m10/ding.mp3"
@@ -37,7 +39,8 @@ class Floor:
         self.made_order = False
         self.clock_position = 0
         self.timer_Rect = 0
-        self.time_on = False 
+        self.time_on = False
+        self.start_clock = 0
         
     def get_id(self):
         return self.number
@@ -62,7 +65,7 @@ class Floor:
         self.clock_position = (0 + width_img/4,self.roof_position + black_space_thickness + height_img/4)
         position_and_size = 0,self.roof_position + black_space_thickness, self.timer_width, height_img
         self.timer_Rect = pg.Rect(position_and_size)
-        
+         
     
     def drew_floor_number(self, screen, roof_position, color):
         font = pg.font.Font(None, int(height_img/2)) 
@@ -97,4 +100,21 @@ class Floor:
         pg.display.flip()
         
     # #operations of call
+    
+    def draw_timer_display(self,screen,turn_on):
+        if turn_on:    
+            pg.draw.rect(screen, black_space_color, self.timer_Rect)
+            font = pg.font.Font(None, int(height_img/2)) 
+            number = font.render(f'{self.time_left}', True, button_on_hold_color)
+            screen.blit(number, self.clock_position)        
+        else:
+            pg.draw.rect(screen, screen_color, self.timer_Rect) 
+
+    def request_in_process(self,arrival_time,screen):
+        arrival_time = int(arrival_time*10)/10
+        self.time_left = arrival_time
+        print(self.time_left)
+        self.drew_button(screen, self.roof_position,order)
+        self.draw_timer_display(screen,True)
+        self.start_clock = time.time()
         

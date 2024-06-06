@@ -8,7 +8,7 @@ class Building:
     def __init__(self) -> None:
         self.elevators = []
         self.floors =[]
-        self.update_time = time.time()
+        self.update_time = 0
         
     def update_elevators(self, screen):
         screen_height = pg.display.get_surface().get_height()   
@@ -34,14 +34,24 @@ class Building:
             floor.build_floor(num_floor,screen,screen_height)
             self.floors.append(floor)
 
-
-        
-
-
     def new_building_architect(self,floors_num, elevators_num, screen):
         screen_height = pg.display.get_surface().get_height()
         self.floors_builder(floors_num,screen, screen_height)
         self.elevators_builder(elevators_num, screen, screen_height)
+     
+    def close_finish_orders(self):
+        current_time = time.time()
+        for elevator in self.elevators:
+            dest_y = self.floors[elevator.dst].roof_position
+            print(current_time - elevator.stop_time)
+            if dest_y == elevator.current_location and elevator.stop_time != 0 and current_time - elevator.stop_time >= 2:
+                elevator.stop_time = 0
+                elevator.finish_order()
+             
+     
+     
+     
+     
         
     # def update_elevators_status(self):
     #     for elevator in self.elevators:

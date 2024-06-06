@@ -38,7 +38,8 @@ def show_arrival_time(screen,building):
                     # number = font.render(f'{0.0}', True, button_on_hold_color)
                     # screen.blit(number, floor.clock_position)  
                     floor.drew_button(screen, floor.roof_position, order_completed)
-                    pg.draw.rect(screen, screen_color, floor.timer_Rect)  
+                    pg.draw.rect(screen, screen_color, floor.timer_Rect)
+                      
                 building.update_time = time.time()                      
                 floor.time_on = False
                    
@@ -47,28 +48,41 @@ def show_arrival_time(screen,building):
     # show_timing = threading.Thread(target=show_arrival_time,args=(screen,building))    
     # show_timing.start()
         
-def travels(screen,building):
+# def travels(screen,building):
     
-    for elevator in building.elevators:  
-        height_floor = building.floors[elevator.dst].height
-        if elevator.travels:
-            new_time = time.time()
-            half_a_second = new_time - building.update_time
-            if  half_a_second >= 0.5:
-                 for floor in elevator.que:
-                    building.floors[floor].time_on = True
-            if new_time - elevator.stop_time >= 2:
-                dest_y = building.floors[elevator.dst].roof_position
-                if elevator.current_location == dest_y:
-                    elevator.finish_order(building)   
-                elif  half_a_second >= 0.5:
-                    vector = (dest_y - elevator.current_location)/abs(dest_y - elevator.current_location)
-                    while elevator.current_location / height_floor != elevator.current_location // height_floor:
-                        elevator.current_location +=  vector    
-                else:   
-                    vector = (dest_y - elevator.current_location)/abs(dest_y - elevator.current_location)   
-                    elevator.current_location +=  vector
-                    building.update_elevators(screen)
+#     for elevator in building.elevators:  
+#         height_floor = building.floors[elevator.dst].height
+#         if elevator.travels:
+#             new_time = time.time()
+#             half_a_second = new_time - building.update_time
+#             if  half_a_second >= 0.5:
+#                  for floor in elevator.que:
+#                     building.floors[floor].time_on = True
+#             if new_time - elevator.stop_time >= 2:
+#                 dest_y = building.floors[elevator.dst].roof_position
+#                 if elevator.current_location == dest_y:
+#                     elevator.finish_order(building)   
+#                 elif  half_a_second >= 0.5:
+#                     vector = (dest_y - elevator.current_location)/abs(dest_y - elevator.current_location)
+#                     while elevator.current_location / height_floor != elevator.current_location // height_floor:
+#                         elevator.current_location +=  vector    
+#                 else:   
+#                     vector = (dest_y - elevator.current_location)/abs(dest_y - elevator.current_location)   
+#                     elevator.current_location +=  vector
+#                     building.update_elevators(screen)
+
+def travels(screen,building):
+    for elevator in building.elevators:         
+        if elevator.dst != elevator.departure and elevator.in_travel:
+            dest_y = building.floors[elevator.dst].roof_position     
+            if dest_y != elevator.current_location:
+                vector = (dest_y - elevator.current_location)/abs(dest_y - elevator.current_location)   
+                elevator.current_location +=  vector
+                building.update_elevators(screen)
+            else:
+                elevator.stop_time = time.time()
+                elevator.in_travel = False
+                
                     
                 
 def call(building,event,screen):
@@ -79,12 +93,12 @@ def call(building,event,screen):
         for floor in building.floors:
             x2, y2 = floor.button
             if (x1-x2)**2 +(y1-y2)**2 <= floor.button_radius**2:
-                if not floor.made_order:
+                # if not floor.made_order:
                     floor.made_order = True
                     floor.time_on = True
-                    priority_elevator, floor.time_left = elevator_selection(floor.number,building)
-                    priority_elevator.send_order(floor.number, building, screen)
-                    # show_arrival_time(screen, building)
+                    elevator_selection(floor.number,building)
+                    
+                    
            
 
                 

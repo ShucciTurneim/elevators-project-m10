@@ -44,9 +44,10 @@ def main(elevators_numbers,floors_number):
                 finish = True              
             #call is function of manager
             call(building,event, screen)
-        show_arrival_time(screen, building)
+        # show_arrival_time(screen, building)
         # show_time(screen,building)
         travels(screen,building)
+        building.close_finish_orders()
         # building.update_elevators_status()     
         pg.display.flip()
         pg.time.Clock().tick(height_floor*2)

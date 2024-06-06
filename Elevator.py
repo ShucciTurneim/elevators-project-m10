@@ -27,12 +27,12 @@ class Elevator:
         self.que = deque()
         self.absolute_stop = 0
         self.departure = 0  # self.que.popleft
-        self.next_stop = 0
         self.operation_duration = 0  # sum of all times of objects in q
         self.dst = 0
-        self.travels = False
+        self.in_travel = False
         self.stand_by = False
         self.stop_time = 0
+        self.start_clock = 0
         
     #for global use
     def width():
@@ -52,36 +52,54 @@ class Elevator:
         
     # def 
         
-    def send_order(self, floor, building, screen):
-        new_travel_duration = (abs(floor - self.absolute_stop)/2) + stand_by
+    def send_order(self, dst):
+        new_travel_duration = (abs(dst - self.absolute_stop)/2) + stand_by
         self.operation_duration += new_travel_duration
-        self.que.append(floor)    
-        self.next_stop = self.que[0]
+        self.que.append(dst)    
         self.absolute_stop = self.que[-1]
-        self.dst = self.next_stop
-        self.travels = True
+        self.dst = self.que[0]
+        # self.travels = True
+        self.start_clock = time.time()
+        if self.stop_time == 0:
+            self.in_travel = True
+        
         
 
-    def finish_order(self,building):
-        self.travels = False
-        ended_travel_duration = abs(self.departure - self.next_stop)/2 +2 #standby_time
+    # def finish_order(self,building):
+    #     self.travels = False
+    #     ended_travel_duration = abs(self.departure - self.dst)/2 +2 #standby_time
+    #     self.operation_duration -= ended_travel_duration
+    #     self.departure = self.que.popleft()
+    #     floor = building.floors[self.dst]
+    #     floor.made_order = False
+    #     if self.que:
+    #         self.dst = self.que[0]
+    #         self.travels = True
+    #     self.stop_time = time.time()
+    
+    
+    def finish_order(self):
+        print("hell")
+        ended_travel_duration = abs(self.departure - self.dst)/2 +2 #standby_time
         self.operation_duration -= ended_travel_duration
         self.departure = self.que.popleft()
-        floor = building.floors[self.dst]
-        floor.made_order = False
         if self.que:
             self.dst = self.que[0]
-            self.travels = True
-        self.stop_time = time.time()
+            self.in_travel = True
+        self.start_clock = 0
+    
             
         # sound =  pg.mixer.Sound(floor.sound_voice)    
         # sound.play()
-               
-        
-
-        
+           
+    # def elapsed_time(self,building):
+    #     next_stop = self.dst
+    #     return (abs(next_stop - self.departure)/2)  - building.floors[next_stop].time_left
+    
     def elapsed_time(self,building):
-        next_stop = self.next_stop
-        return (abs(next_stop - self.departure)/2)  - building.floors[next_stop].time_left
-
+        if self.start_clock != 0:
+            current_time = time.time()
+            return current_time - self.start_clock
+        else:
+            return 0
             

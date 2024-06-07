@@ -3,7 +3,7 @@ import pygame as pg
 import pygame.mixer
 from Floor import Floor
 import time
-width_elevator = 200
+width_elevator = 100
 height_elevator = Floor.height()
 stand_by = 2
 screen_color =(255,255,255)
@@ -13,8 +13,6 @@ class Elevator:
     def __init__(self, number):
      # variables of creating elevator
         self.number = number
-        self.width = width_elevator
-        self.height = height_elevator
         self.width_position = 0
         self.position = 0
         self.current_location = 0
@@ -25,7 +23,7 @@ class Elevator:
     # variables of elevator travel
         self.que = deque()
         self.absolute_stop = 0
-        self.departure = 0  # self.que.popleft
+        self.departure = 0           # self.que.popleft
         self.operation_duration = 0  # sum of all times of objects in q
         self.dst = 0
         self.in_travel = False
@@ -39,8 +37,8 @@ class Elevator:
 
      # operations of creating elevator
     def build_elevator(self, num_elevator, screen_height, screen):
-        self.width_position = (num_elevator * self.width + Floor.width() + Floor.timer_width())
-        self.height_position = (screen_height - self.height)
+        self.width_position = (num_elevator * width_elevator + Floor.width() + Floor.timer_width())
+        self.height_position = (screen_height - height_elevator)
         self.current_location =  self.height_position
         
     # operations of elevator travels
@@ -55,6 +53,14 @@ class Elevator:
         self.dst = self.que[0]
         if self.stop_time == 0:
             self.in_travel = True
+            
+    
+    def elapsed_time(self):
+        if self.start_clock != 0:
+            current_time = time.time()
+            return current_time - self.start_clock
+        else:
+            return 0        
     
     
     def finish_order(self):
@@ -71,10 +77,4 @@ class Elevator:
        # sound =  pg.mixer.Sound(floor.sound_voice)    
         # sound.play()
     
-    def elapsed_time(self):
-        if self.start_clock != 0:
-            current_time = time.time()
-            return current_time - self.start_clock
-        else:
-            return 0
             

@@ -2,7 +2,7 @@ import pygame as pg
 from  Architect import Building
 from Elevator import Elevator
 from Floor import Floor
-from Manager import call, travels,update_arrival_time 
+from Manager import Manager
 import time
 height_floor = 64
 
@@ -23,15 +23,10 @@ def screen_design(elevators_numbers,floors_number):
     # screen.blit(background_screen,(0,0))
     return screen
     
-def main(elevators_numbers,floors_number):
-    # if type(elevators_numbers) != int or type(floors_number) != int:
-    #    return main(elevators_numbers,floors_number)
-    # int(elevators_numbers)
-    # int(floors_number)
-    
-    
+def main(elevators_numbers,floors_number):    
     screen = screen_design(elevators_numbers,floors_number)   
     building = Building()
+    manager = Manager()
     
        #initial creation of floors and elevators
     building.new_building_architect(floors_number, elevators_numbers, screen) 
@@ -40,22 +35,18 @@ def main(elevators_numbers,floors_number):
     finish = False
     while not finish:
         sleep_T = finish_T - start_T
-        time.sleep(abs((1/height_floor)-sleep_T))
-        start_T = time.time()
-        
+        if (1/height_floor) > sleep_T:
+            time.sleep(abs((1/height_floor)-sleep_T))
+        start_T = time.time()   
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 finish = True              
             #call is function of manager
-            call(building,event, screen)
-        # show_arrival_time(screen, building)
-        # show_time(screen,building)
-        travels(screen,building)
-        update_arrival_time(building,screen)
-        building.close_finish_orders()
-        # building.update_elevators_status()     
+            manager.call(building,event, screen)
+        manager.travels(screen,building)
+        manager.update_arrival_time(building,screen)
+        manager.close_finish_orders(building)    
         pg.display.flip()
-        # pg.time.Clock().tick(height_floor*2)
         pg.time.Clock().tick(height_floor*4)
         finish_T = time.time()
       

@@ -44,7 +44,7 @@ class Building:
         for elevator in self.elevators:
             dest_y = self.floors[elevator.dst].roof_position
             # print(current_time - elevator.stop_time)
-            if dest_y == elevator.current_location and elevator.stop_time != 0 and current_time - elevator.stop_time >= 2:
+            if dest_y == elevator.current_location and 2 <= current_time - elevator.stop_time < current_time:
                 elevator.stop_time = 0
                 elevator.finish_order()
              

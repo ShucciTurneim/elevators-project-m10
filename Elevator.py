@@ -48,11 +48,11 @@ class Elevator:
     def send_order(self, dst):
         new_travel_duration = (abs(dst - self.absolute_stop)/2) + stand_by
         self.operation_duration += new_travel_duration
+        if not self.que:
+            self.start_clock = time.time()
         self.que.append(dst)    
         self.absolute_stop = self.que[-1]
         self.dst = self.que[0]
-        # self.travels = True
-        self.start_clock = time.time()
         if self.stop_time == 0:
             self.in_travel = True
     
@@ -65,7 +65,9 @@ class Elevator:
         if self.que:
             self.dst = self.que[0]
             self.in_travel = True
-        self.start_clock = 0
+            self.start_clock = time.time()
+        else:    
+            self.start_clock = 0
        # sound =  pg.mixer.Sound(floor.sound_voice)    
         # sound.play()
     

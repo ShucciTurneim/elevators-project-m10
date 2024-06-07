@@ -2,10 +2,8 @@ import pygame as pg
 from  Architect import Building
 from Elevator import Elevator
 from Floor import Floor
-from Manager import call, travels,show_arrival_time,update_arrival_time
-from elevator_selection import elevator_selection
+from Manager import call, travels,update_arrival_time 
 import time
-import pygame.mixer
 height_floor = 64
 
 

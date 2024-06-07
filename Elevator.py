@@ -1,5 +1,4 @@
 from collections import deque
-# from Architect import Building
 import pygame as pg
 import pygame.mixer
 from Floor import Floor
@@ -44,13 +43,7 @@ class Elevator:
         self.height_position = (screen_height - self.height)
         self.current_location =  self.height_position
         
-        
-        
-    
-
-        # operations of elevator travel
-        
-    # def 
+    # operations of elevator travels
         
     def send_order(self, dst):
         new_travel_duration = (abs(dst - self.absolute_stop)/2) + stand_by
@@ -62,20 +55,6 @@ class Elevator:
         self.start_clock = time.time()
         if self.stop_time == 0:
             self.in_travel = True
-        
-        
-
-    # def finish_order(self,building):
-    #     self.travels = False
-    #     ended_travel_duration = abs(self.departure - self.dst)/2 +2 #standby_time
-    #     self.operation_duration -= ended_travel_duration
-    #     self.departure = self.que.popleft()
-    #     floor = building.floors[self.dst]
-    #     floor.made_order = False
-    #     if self.que:
-    #         self.dst = self.que[0]
-    #         self.travels = True
-    #     self.stop_time = time.time()
     
     
     def finish_order(self):
@@ -87,16 +66,10 @@ class Elevator:
             self.dst = self.que[0]
             self.in_travel = True
         self.start_clock = 0
-    
-            
-        # sound =  pg.mixer.Sound(floor.sound_voice)    
+       # sound =  pg.mixer.Sound(floor.sound_voice)    
         # sound.play()
-           
-    # def elapsed_time(self,building):
-    #     next_stop = self.dst
-    #     return (abs(next_stop - self.departure)/2)  - building.floors[next_stop].time_left
     
-    def elapsed_time(self,building):
+    def elapsed_time(self):
         if self.start_clock != 0:
             current_time = time.time()
             return current_time - self.start_clock

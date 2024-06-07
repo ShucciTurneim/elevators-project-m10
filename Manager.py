@@ -77,29 +77,41 @@ def show_arrival_time(screen,building):
 def update_arrival_time(building,screen):
     current_time = time.time()
     for floor in building.floors:
-        if floor.made_order and current_time - floor.start_clock >= 0.28:
-            floor.time_left -= 0.3
-            floor.time_left = int(floor.time_left*10)/10
+        if floor.made_order and current_time - floor.start_clock >= 0.5:
+            time_past = int((current_time - floor.start_clock)*10)
+            # print(time_past)
+            floor.time_left -= 0.5
+            # floor.time_left = int(floor.time_left*10)/10
             floor.draw_timer_display(screen,True)
             floor.start_clock = time.time()
-            if 0.0 <= floor.time_left <= 0.35:
+            if  floor.time_left <= 0.0:
                 floor.made_order = False
                 floor.draw_timer_display(screen,False)
                 floor.drew_button(screen, floor.roof_position,order_completed)
-            
-
+                
+                
+def find_direction(dest_y,elevator):
+    return (dest_y - elevator.current_location)/abs(dest_y - elevator.current_location)                
+                
+def steps(dest_y,elevator):
+    mov_direction = find_direction(dest_y,elevator)
+    vector = mov_direction*2  
+    elevator.current_location +=  vector
+    if dest_y != elevator.current_location and mov_direction != find_direction(dest_y,elevator):
+        elevator.current_location = dest_y  
+                       
 def travels(screen,building):
     for elevator in building.elevators:         
         if elevator.dst != elevator.departure and elevator.in_travel:
             dest_y = building.floors[elevator.dst].roof_position     
             if dest_y != elevator.current_location:
-                vector = (dest_y - elevator.current_location)/abs(dest_y - elevator.current_location)*2  
-                elevator.current_location +=  vector
+                steps(dest_y,elevator)
                 building.update_elevators(screen)
+                print(time.time()-elevator.start_clock,elevator.current_location)
             else:
                 elevator.stop_time = time.time()
                 elevator.in_travel = False
-                print (elevator.number,elevator.elapsed_time(building))
+                # print (elevator.number,elevator.elapsed_time(building))
                 
                     
                 
@@ -115,7 +127,7 @@ def call(building,event,screen):
                 for elevator in building.elevators: 
                     elevator_at_floor.append(elevator.current_location)
                 if floor.roof_position not in elevator_at_floor:
-                    print(floor.number)
+                    # print(floor.number)
                     # if not floor.made_order:
                     floor.made_order = True
                     # floor.time_on = True

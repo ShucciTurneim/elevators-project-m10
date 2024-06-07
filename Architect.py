@@ -48,18 +48,3 @@ class Building:
                 elevator.stop_time = 0
                 elevator.finish_order()
              
-     
-     
-     
-     
-        
-    # def update_elevators_status(self):
-    #     for elevator in self.elevators:
-    #         if elevator.stand_by:
-    #             nwe_time = time.time()
-    #             if nwe_time - elevator.stop_time > 2:
-    #                 elevator.travels = True
-    #                 elevator.stand_by = False
-    #                 print(elevator.stop_time)
-                     
-        

@@ -61,7 +61,7 @@ def main(elevators_numbers,floors_number):
         pg.time.Clock().tick(height_floor*4)
         finish_T = time.time()
       
-main(3,9)
+main(1,9)
 
    
 

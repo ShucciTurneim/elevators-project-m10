@@ -105,7 +105,8 @@ class Floor:
         if turn_on:    
             pg.draw.rect(screen, black_space_color, self.timer_Rect)
             font = pg.font.Font(None, int(height_img/2)) 
-            number = font.render(f'{self.time_left}', True, button_on_hold_color)
+            print_format = int(self.time_left*10)/10
+            number = font.render(f'{print_format}', True, button_on_hold_color)
             screen.blit(number, self.clock_position)        
         else:
             pg.draw.rect(screen, screen_color, self.timer_Rect) 

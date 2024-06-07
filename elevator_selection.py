@@ -7,7 +7,7 @@ def elevator_selection(floor,building,screen):
     dst = floor.number
     min_possible_time = float('inf')
     for elevator in building.elevators:    
-        arrival_time = elevator.operation_duration + dst_arrival_time(dst,elevator) - elevator.elapsed_time(building)
+        arrival_time = elevator.operation_duration + dst_arrival_time(dst,elevator) - elevator.elapsed_time()
         if min_possible_time > arrival_time: 
             min_possible_time = arrival_time
             priority_elevator = elevator

@@ -1,12 +1,9 @@
 from collections import deque
-import pygame as pg
-import pygame.mixer
+# import pygame as pg
 from Floor import Floor
 import time
-width_elevator = 100
-height_elevator = Floor.height()
+
 stand_by = 2
-screen_color =(255,255,255)
 
 
 class Elevator:
@@ -16,11 +13,8 @@ class Elevator:
         self.width_position = 0
         self.position = 0
         self.current_location = 0
-        self.path_img = "elv.png"
-        img = pg.image.load(self.path_img)
-        self.IMAGE = pg.transform.scale(img, (width_elevator, height_elevator))
-
-    # variables of elevator travel
+        
+     # variables of elevator travel
         self.que = deque()
         self.absolute_stop = 0
         self.departure = 0           # self.que.popleft
@@ -32,13 +26,12 @@ class Elevator:
         self.start_clock = 0
         
     #for global use
-    def width():
-        return width_elevator
+
 
      # operations of creating elevator
-    def build_elevator(self, num_elevator, screen_height, screen):
-        self.width_position = (num_elevator * width_elevator + Floor.width() + Floor.timer_width())
-        self.height_position = (screen_height - height_elevator)
+    def build_elevator(self, num_elevator, screen_height, A):
+        self.width_position = (num_elevator * A.width_elevator + A.floor_width + A.timer_width)
+        self.height_position = (screen_height - A.height_elevator)
         self.current_location =  self.height_position
         
     # operations of elevator travels
@@ -64,7 +57,6 @@ class Elevator:
     
     
     def finish_order(self):
-        print("hell")
         ended_travel_duration = abs(self.departure - self.dst)/2 +2 #standby_time
         self.operation_duration -= ended_travel_duration
         self.departure = self.que.popleft()
@@ -74,7 +66,6 @@ class Elevator:
             self.start_clock = time.time()
         else:    
             self.start_clock = 0
-       # sound =  pg.mixer.Sound(floor.sound_voice)    
-        # sound.play()
+
     
             

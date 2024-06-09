@@ -1,5 +1,5 @@
 import pygame as pg
-from  Architect import Building
+from  Architect import Architect
 from Elevator import Elevator
 from Floor import Floor
 from Manager import Manager
@@ -10,26 +10,26 @@ height_floor = 64
 background_screen_img = "lobby.png"
 screen_color =(255,255,255)
         #initial creation of the background screen and dimensions  
-def screen_design(elevators_numbers,floors_number):
-    width = (elevators_numbers) * Elevator.width() + Floor.width() + Floor.timer_width()
-    height = floors_number * Floor.height() - Floor.black_space_thickness()
+def screen_design(elevators_numbers,floors_number, A):
+    width = (elevators_numbers) * A.width_elevator + A.floor_width + A.timer_width
+    height = floors_number * A.floor_height - A.black_space_thickness
     pg.init()
     size = (width,height)
     screen = pg.display.set_mode(size)
-    pg.display.set_caption("building_game")
+    pg.display.set_caption("manager_game")
     screen.fill(screen_color)
     # background_screen = pg.image.load(background_screen_img)
     # background_screen = pg.transform.scale(background_screen, (width, height))
     # screen.blit(background_screen,(0,0))
     return screen
+
     
 def main(elevators_numbers,floors_number):    
-    screen = screen_design(elevators_numbers,floors_number)   
-    building = Building()
     manager = Manager()
-    
+    A = Architect()
+    screen = screen_design(elevators_numbers,floors_number, A) 
        #initial creation of floors and elevators
-    building.new_building_architect(floors_number, elevators_numbers, screen) 
+    A.new_building_architect(floors_number, elevators_numbers, screen, manager) 
     start_T = 0
     finish_T = 0
     finish = False
@@ -42,15 +42,15 @@ def main(elevators_numbers,floors_number):
             if event.type == pg.QUIT:
                 finish = True              
             #call is function of manager
-            manager.call(building,event, screen)
-        manager.travels(screen,building)
-        manager.update_arrival_time(building,screen)
-        manager.close_finish_orders(building)    
+            manager.call(event, screen, A)  
+        manager.travels(screen,A)
+        manager.update_arrival_time(manager,screen, A)  
+        manager.close_finish_orders(manager)    
         pg.display.flip()
         pg.time.Clock().tick(height_floor*4)
         finish_T = time.time()
       
-main(1,9)
+main(1,12)
 
    
 

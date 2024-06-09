@@ -3,6 +3,7 @@ import pygame as pg
 from Floor import Floor
 class Architect:
     def __init__(self) -> None:
+        
         self.ding = "ding.mp3"
         self.black_space_color = (0, 0, 0)
         self.numbers_default_color = (225, 0, 0)

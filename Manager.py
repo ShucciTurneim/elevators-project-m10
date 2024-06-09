@@ -1,7 +1,6 @@
 
 import pygame as pg
 import time
-
 order_completed = -1
 
 class Manager:
@@ -44,9 +43,8 @@ class Manager:
     def update_arrival_time(self,manager,screen, A):
         current_time = time.time()
         for floor in manager.floors:
-            if floor.made_order and current_time - floor.start_clock >= 0.2:
-                floor.time_left -= 0.2
-                # floor.time_left -= (current_time - floor.start_clock)
+            if floor.made_order and current_time - floor.start_clock >= 0.1:
+                floor.time_left -= (current_time - floor.start_clock)
                 floor.draw_timer_display(screen,True, A)
                 floor.start_clock = time.time()
                 if  floor.time_left <= 0.0:

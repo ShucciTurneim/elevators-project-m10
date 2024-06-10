@@ -19,8 +19,9 @@ class Floor:
         self.timer_Rect = 0
         self.start_clock = 0
 
+        # Determination location of floor and accessories for each floor.
     def design(self,num_floor,screen_height,A):
-        self.roof_position = screen_height - (num_floor+1) * A.floor_height
+        self.roof_position = screen_height - (num_floor+1) * A.floor_height  #
         width_button_position = A.floor_width_position + A.floor_width_img/2
         height_button_position = self.roof_position + A.black_space_thickness +A.floor_height_img/2
         self.button = width_button_position,height_button_position
@@ -37,7 +38,7 @@ class Floor:
         screen.blit(number, text_r)
 
     def drew_button(self, screen, roof_position, called_by,A):
-        self.button_radius = A.floor_width_img/4
+        self.button_radius = A.floor_height_img//2.5
         if called_by in (builder,order_completed):
             color = A.button_default_color
             color_number = A.numbers_default_color

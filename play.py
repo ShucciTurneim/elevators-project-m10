@@ -10,7 +10,7 @@ def screen_design(elevators_numbers,floors_number, A):
     pg.init()
     size = (width,height)
     screen = pg.display.set_mode(size)
-    pg.display.set_caption("manager_game")
+    pg.display.set_caption("building_game")
     screen.fill(A.screen_color)
     return screen
 

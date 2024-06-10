@@ -3,25 +3,14 @@ from  Architect import Architect
 from Manager import Manager
 import time
 
-        #initial creation of the background screen and dimensions  
-def screen_design(elevators_numbers,floors_number, A):
-    width = (elevators_numbers) * A.width_elevator + A.floor_width + A.timer_width
-    height = floors_number * A.floor_height - A.black_space_thickness
-    pg.init()
-    size = (width,height)
-    screen = pg.display.set_mode(size)
-    pg.display.set_caption("building_game")
-    screen.fill(A.screen_color)
-    return screen
-
     
 def main(elevators_numbers,floors_number):    
     manager = Manager()
     A = Architect()
        #initial creation of the background screen and dimensions 
-    screen = screen_design(elevators_numbers,floors_number, A) 
+    screen = A.screen_design(elevators_numbers,floors_number) 
        #initial creation of floors and elevators
-    A.new_building_architect(floors_number, elevators_numbers, screen, manager) 
+    manager.new_building_architect(floors_number, elevators_numbers, screen, A) 
     #Reset clock for first iteration
     start_T = 0
     finish_T = 0
@@ -45,9 +34,9 @@ def main(elevators_numbers,floors_number):
         # Countdown display
         manager.update_arrival_time(manager,screen, A)  
         # Closing the reservation and updating the elevator status
-        manager.close_finish_orders(manager)    
+        manager.close_finish_orders()    
         pg.display.flip()
-        pg.time.Clock().tick(A.floor_height*4)
+        pg.time.Clock().tick(A.floor_height*2)
         finish_T = time.time()
       
 main(3,12)

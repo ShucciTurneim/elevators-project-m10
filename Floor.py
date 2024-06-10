@@ -78,4 +78,15 @@ class Floor:
         self.drew_button(screen, self.roof_position,order,A)
         self.draw_timer_display(screen,True, A)
         
+    def display_clock(self, screen,A):
+        current_time = time.time()
+        if self.made_order: #and current_time - self.start_clock >= 0.1:
+            self.time_left -= (current_time - self.start_clock)
+            self.start_clock = time.time()
+            self.draw_timer_display(screen,True, A)
+            if  self.time_left <= 0.0:
+                self.made_order = False
+                self.draw_timer_display(screen,False, A)
+                self.drew_button(screen, self.roof_position,order_completed, A)      
+        
         

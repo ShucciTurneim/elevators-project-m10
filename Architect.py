@@ -32,32 +32,21 @@ class Architect:
         self.elevator_path_img = "elv.png"
         self.elevator_img = pg.image.load(self.elevator_path_img)
         self.elevator_IMAGE = pg.transform.scale(self.elevator_img, (self.width_elevator, self.height_elevator))
+        
+        #initial creation of the background screen and dimensions 
+    def screen_design(self,elevators_numbers,floors_number):
+        width = (elevators_numbers) * self.width_elevator + self.floor_width + self.timer_width
+        height = floors_number * self.floor_height - self.black_space_thickness
+        pg.init()
+        size = (width,height)
+        screen = pg.display.set_mode(size)
+        pg.display.set_caption("building_game")
+        screen.fill(self.screen_color)
+        return screen
 
 
-        #Updates location of elevators During the construction phase and the travel phase
-    def update_elevators(self, screen, manager):
-        for elevator in manager.get_elevators():    # x,            y
-            elevator.position = elevator.width_position,elevator.current_location      
-            rect = pg.Rect(elevator.width_position, elevator.current_location , self.width_elevator, self.height_elevator)
-            screen.fill(self.screen_color,rect)
-            screen.blit(self.elevator_IMAGE, (elevator.position))
 
-    def elevators_builder(self,elevators_num, screen, screen_height, manager):
-        for num_elevator in range(elevators_num):
-            elevator = Elevator(num_elevator)
-            elevator.build_elevator(num_elevator, screen_height, self)
-            manager.set_elevators(elevator)
-        self.update_elevators(screen, manager)    
 
-    def floors_builder(self,num_floors,screen, screen_height, manager):
-        for num_floor in range(num_floors):
-            floor = Floor(num_floor)
-            floor.build_floor(num_floor,screen,screen_height, self)
-            manager.set_floors(floor)
 
-    def new_building_architect(self,floors_num, elevators_num, screen, manager):
-        screen_height = pg.display.get_surface().get_height()
-        self.floors_builder(floors_num,screen, screen_height, manager)
-        self.elevators_builder(elevators_num, screen, screen_height, manager)
-     
+
              

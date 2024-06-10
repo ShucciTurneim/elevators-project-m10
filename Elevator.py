@@ -1,5 +1,5 @@
 from collections import deque
-# import pygame as pg
+import pygame as pg
 from Floor import Floor
 import time
 
@@ -25,9 +25,6 @@ class Elevator:
         self.stop_time = 0
         self.start_clock = 0
         
-    #for global use
-
-
      # operations of creating elevator
     def build_elevator(self, num_elevator, screen_height, A):
         self.width_position = (num_elevator * A.width_elevator + A.floor_width + A.timer_width)
@@ -54,6 +51,28 @@ class Elevator:
             return current_time - self.start_clock
         else:
             return 0        
+       
+                           #travel_functions
+    def find_direction(self,dest_y):
+        return (dest_y - self.current_location)/abs(dest_y - self.current_location)                
+                    
+    def steps(self,dest_y):
+        mov_direction = self.find_direction(dest_y)
+        vector = mov_direction*2  
+        self.current_location +=  vector                        
+        if dest_y != self.current_location and mov_direction != self.find_direction(dest_y):
+            self.current_location = dest_y  
+        
+
+    def travel(self,dest_y,screen,A,manager):                                            #
+        if dest_y != self.current_location:
+            self.steps(dest_y)
+            manager.update_elevators(screen,A)
+        else:
+            self.stop_time = time.time()
+            self.in_travel = False
+            pg.mixer.music.load(A.ding)
+            pg.mixer.music.play()
     
     
     def finish_order(self):

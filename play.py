@@ -17,11 +17,10 @@ def screen_design(elevators_numbers,floors_number):
 
     
 def main(elevators_numbers,floors_number):    
-    manager = Manager()
        #initial creation of the background screen and dimensions 
     screen = screen_design(elevators_numbers,floors_number) 
        #initial creation of floors and elevators
-    manager.new_building_architect(floors_number, elevators_numbers, screen) 
+    manager = Manager(floors_number, elevators_numbers, screen)
     #Reset clock for first iteration
     start_T = 0
     finish_T = 0
@@ -47,7 +46,7 @@ def main(elevators_numbers,floors_number):
         # Closing the reservation and updating the elevator status
         manager.close_finish_orders()    
         pg.display.flip()
-        pg.time.Clock().tick(floor_height*2)
+        pg.time.Clock().tick(floor_height*4)
         finish_T = time.time()
       
 main(1,12)

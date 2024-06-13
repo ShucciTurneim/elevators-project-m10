@@ -16,6 +16,11 @@ class Floor:
         self.clock_position = 0
         self.timer_Rect = 0
         self.start_clock = 0
+        
+        
+    def get_roof_position(self):
+        return self.roof_position
+        
 
         # Determination location of floor and accessories for each floor.
     def design(self,num_floor,screen_height):
@@ -66,7 +71,10 @@ class Floor:
         self.drew_button(screen, builder)
         self.drew_roof(screen)
         
+        
     # #operations of call
+    
+    
     
     def draw_timer_display(self,screen,turn_on):
         if turn_on:    
@@ -77,7 +85,16 @@ class Floor:
             screen.blit(number, self.clock_position)        
         else:
             pg.draw.rect(screen, screen_color, self.timer_Rect) 
-
+            
+            
+        #Checks that there is no elevator on the floor    
+    def permission_checker(self, elevator_at_floor):
+        """elevator_at_floor = array of all elevators positions """
+        if self.roof_position not in elevator_at_floor:
+            self.made_order = True
+            return True
+        return False
+    
 
     #Initializing order data, coloring a button and displaying order duration
     def request_in_process(self,arrival_time,screen):

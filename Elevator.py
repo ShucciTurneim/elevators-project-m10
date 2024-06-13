@@ -24,10 +24,13 @@ class Elevator:
     
                 
                         #Updates location of elevator During the construction phase and the travel phase
+    def Recolor_screen(self,screen):                    
+        rect = pg.Rect(self.width_position, self.current_location ,width_elevator,height_elevator)
+        screen.fill(screen_color,rect)                
+                        
     def update_location(self, screen):
-            self.position = self.width_position,self.current_location   # --> x,y   
-            rect = pg.Rect(self.width_position, self.current_location ,width_elevator,height_elevator)
-            screen.fill(screen_color,rect)
+            self.position = self.width_position,self.current_location   # --> x,y  
+            self.Recolor_screen(screen)
             screen.blit(elevator_IMAGE, (self.position))
 
         
@@ -61,48 +64,57 @@ class Elevator:
         if self.stop_time == 0:                                                          # Update status
             self.in_travel = True
             
-    
+    # Calculation of time remaining until the end of all elevator activity
     def elapsed_time(self):
-        if self.start_clock != 0:
+        if self.start_clock != 0:               # Makes sure the elevator is in operation
             current_time = time.time()
             return current_time - self.start_clock
         else:
             return 0        
        
                            #travel_functions
+                           
     def find_direction(self,dest_y):
         return (dest_y - self.current_location)/abs(dest_y - self.current_location)                
                     
+                    
+          #Calculation of the new position: including movement direction and step size.          
     def steps(self,dest_y):
         mov_direction = self.find_direction(dest_y)
         step_size = 2
         vector = mov_direction*step_size
-        self.current_location +=  vector                        
+        self.current_location +=  vector               
+        #In case the elevator missed the target         
         if dest_y != self.current_location and mov_direction != self.find_direction(dest_y):
             self.current_location = dest_y  
 
 
-    def travel(self,dest_y,screen):                                            #
+    # Directs the progress of the journey, or ends it: including a change of status, Play a sound and reset the clock
+    def travel(self,dest_y,screen):                                            
         if dest_y != self.current_location:
             self.steps(dest_y)
+            self.Recolor_screen(screen)
             self.update_location(screen)
-        else:
+        else:                                       # ends : including a change of status, Play a sound and reset the clock
             self.stop_time = time.time()
             self.in_travel = False
             pg.mixer.music.load(ding)
             pg.mixer.music.play()
     
     
-    def finish_order(self):
-        ended_travel_duration = abs(self.departure - self.dst)/2 +stand_by
-        self.operation_duration -= ended_travel_duration
-        self.departure = self.que.popleft()
-        if self.que:
-            self.dst = self.que[0]
-            self.in_travel = True
-            self.start_clock = time.time()
-        else:    
-            self.start_clock = 0
+    def finish_order(self, dest_y, current_time):
+        # Verify waiting time
+        if dest_y == self.current_location and stand_by <= current_time - self.stop_time < current_time:
+            self.stop_time = 0                                                  # reset the stand_by-clock
+            ended_travel_duration = abs(self.departure - self.dst)/2 +stand_by  
+            self.operation_duration -= ended_travel_duration                    # Reduces elapsed travel time
+            self.departure = self.que.popleft()                                 # Queue management
+            if self.que:
+                self.dst = self.que[0]
+                self.in_travel = True
+                self.start_clock = time.time()
+            else:    
+                self.start_clock = 0                                             # reset the Operation time counter clock
 
     
             

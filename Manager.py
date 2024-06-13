@@ -3,58 +3,46 @@ import pygame as pg
 from Elevator import Elevator
 from Floor import Floor
 import time
-order_completed = -1
+from Data_base import *
 
 class Manager:
     def __init__(self):
         self.__elevators = []
         self.__floors = []
         
-    def elevators_builder(self,elevators_num, screen, screen_height,A):
+    def elevators_builder(self,elevators_num, screen):
         for num_elevator in range(elevators_num):
             elevator = Elevator(num_elevator)
-            elevator.build_elevator(num_elevator, screen_height, A)
-            self.set_elevators(elevator)
-        self.update_elevators(screen,A)   
+            elevator.build_elevator(num_elevator,screen)
+            self.__elevators.append(elevator)
         
         
-    def floors_builder(self,num_floors,screen, screen_height,A):
+    def floors_builder(self,num_floors,screen, screen_height):
             for num_floor in range(num_floors):
                 floor = Floor(num_floor)
-                floor.build_floor(num_floor,screen,screen_height,A)
-                self.set_floors(floor)
+                floor.build_floor(num_floor,screen,screen_height)
+                self.__floors.append(floor)
 
 
-    def new_building_architect(self,floors_num, elevators_num, screen,A):
+    def new_building_architect(self,floors_num, elevators_num, screen):
             screen_height = pg.display.get_surface().get_height()
-            self.floors_builder(floors_num,screen, screen_height,A)
-            self.elevators_builder(elevators_num, screen, screen_height, A)
+            self.floors_builder(floors_num,screen, screen_height)
+            self.elevators_builder(elevators_num, screen)
       
-
-    def get_elevators(self):
-        return self.__elevators
         
-    def set_elevators(self,elevator):
-        self.__elevators.append(elevator)
-        
-    def set_floors(self,floor):
-        self.__floors.append(floor)    
-        
-    def elevator_selection(self,floor,screen, A):
+    def elevator_selection(self,floor,screen):
         dst = floor.number 
-        min = float('inf')
+        min_arrival_time = float('inf')
         for elevator in self.__elevators:  
-            dst_distance = abs(elevator.absolute_stop - dst)/2  
-            arrival_time = elevator.operation_duration + dst_distance - elevator.elapsed_time()
-            if min > arrival_time: 
-                min = arrival_time
-                priority_elevator = elevator      
-        arrival_time = min  
-        floor.request_in_process(arrival_time,screen, A)
+            arrival_time = elevator.arrival_time(dst)
+            if min_arrival_time > arrival_time: 
+                min_arrival_time = arrival_time
+                priority_elevator = elevator       
+        floor.request_in_process(min_arrival_time,screen)
         priority_elevator.send_order(dst)
 
 
-    def call(self,event,screen, A):
+    def call(self,event,screen):
         left = 1
         if event.type == pg.MOUSEBUTTONDOWN and event.button  == left:
             mouse_position = pg.mouse.get_pos() 
@@ -67,29 +55,20 @@ class Manager:
                         elevator_at_floor.append(elevator.current_location)
                     if floor.roof_position not in elevator_at_floor:
                         floor.made_order = True
-                        self.elevator_selection(floor,screen, A)
+                        self.elevator_selection(floor,screen)
 
 
-    def update_arrival_time(self,manager,screen, A):
+    def update_arrival_time(self,manager,screen):
         for floor in manager.__floors:           
-               floor.display_clock(screen,A)     
+               floor.display_clock(screen)     
                     
                         
-    def travels(self,screen,A):
+    def travels(self,screen):
         for elevator in self.__elevators:         
-            if elevator.dst != elevator.departure and elevator.in_travel:
+            if elevator.in_travel:  
                 dest = self.__floors[elevator.dst]                                            
                 dest_y = dest.roof_position    
-                elevator.travel(dest_y,screen, A, self)                                            
-                
-                
-                        #Updates location of elevators During the construction phase and the travel phase
-    def update_elevators(self, screen,A):
-        for elevator in self.get_elevators():    # x,            y
-            elevator.position = elevator.width_position,elevator.current_location      
-            rect = pg.Rect(elevator.width_position, elevator.current_location , A.width_elevator, A.height_elevator)
-            screen.fill(A.screen_color,rect)
-            screen.blit(A.elevator_IMAGE, (elevator.position))
+                elevator.travel(dest_y,screen)                                            
                     
                     
     def close_finish_orders(self):
